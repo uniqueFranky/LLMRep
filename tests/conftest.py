@@ -30,3 +30,7 @@ def gpt2_tokenizer():
 @fixture(scope='session')
 def input_text():
     return 'I like apples'
+
+@fixture(scope='session')
+def input_text_with_3gram_rep():
+    return 'I like apples I like apples I like apples I like apples I like apples'
