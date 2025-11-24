@@ -82,3 +82,35 @@ def apply_ngram_penalty(input_text: str, tokenizer, logits: torch.Tensor, n: int
     return logits
 
 
+def greedy_decode_without_penalty(model, tokenizer, prompt, max_length):
+    generated = prompt
+    
+    for _ in range(max_length):
+        logits = compute_logits(model, tokenizer, generated)
+        next_token_id = torch.argmax(logits, dim=-1).item()
+        next_token = tokenizer.decode([next_token_id])
+        
+        generated += next_token
+        
+        if next_token_id == tokenizer.eos_token_id:
+            break
+            
+    return generated
+
+
+def greedy_decode_with_ngram_penalty(model, tokenizer, prompt, max_length, n, lmbda):
+    generated = prompt
+    
+    for _ in range(max_length):
+        logits = compute_logits(model, tokenizer, generated)
+        logits = apply_ngram_penalty(generated, tokenizer, logits, n, lmbda)
+        
+        next_token_id = torch.argmax(logits, dim=-1).item()
+        next_token = tokenizer.decode([next_token_id])
+        
+        generated += next_token
+        
+        if next_token_id == tokenizer.eos_token_id:
+            break
+            
+    return generated
