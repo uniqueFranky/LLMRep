@@ -1,5 +1,8 @@
 from pytest import fixture
+import dotenv
+import os
 
+dotenv.load_dotenv()
 
 @fixture(scope='session')
 def tokens_without_rep():
@@ -26,6 +29,44 @@ def gpt2_model():
 def gpt2_tokenizer():
     from transformers import AutoTokenizer
     return AutoTokenizer.from_pretrained('gpt2')
+
+
+@fixture(scope='session')
+def gemma2_model():
+    from transformers import AutoModelForCausalLM
+    import torch
+
+    return AutoModelForCausalLM.from_pretrained(
+        'google/gemma-2-2b',
+        device_map="auto", 
+        torch_dtype=torch.bfloat16, # 推荐用于 Llama 3.1 和 Gemma 2
+        token=os.getenv('HF_TOKEN')
+    )
+
+@fixture(scope='session')
+def gemma2_tokenizer():
+    from transformers import AutoTokenizer
+    return AutoTokenizer.from_pretrained("google/gemma-2-2b")
+
+
+@fixture(scope='session')
+def llama3_model():
+    from transformers import AutoModelForCausalLM
+    import torch
+
+    return AutoModelForCausalLM.from_pretrained(
+        'meta-llama/Llama-3.1-8B',
+        device_map="auto", 
+        torch_dtype=torch.bfloat16, # 推荐用于 Llama 3.1 和 Gemma 2
+        token=os.getenv('HF_TOKEN')
+    )
+
+@fixture(scope='session')
+def llama3_tokenizer():
+    from transformers import AutoTokenizer
+    return AutoTokenizer.from_pretrained("meta-llama/Llama-3.1-8B")
+
+
 
 @fixture(scope='session')
 def input_text():

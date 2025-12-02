@@ -1,6 +1,7 @@
 from src.decode import compute_logits, apply_ngram_penalty
 from src.metrics import rep_n, rep_r, rep_w
 import logging
+import pytest
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -48,8 +49,16 @@ def test_gpt2_ngram_penalty(gpt2_model, gpt2_tokenizer, input_text_with_3gram_re
         assert new_val < old_val
 
 
-def test_greedy_decode_with_ngram_penalty(gpt2_model, gpt2_tokenizer):
+@pytest.mark.parametrize("model_name, tokenizer_name", [
+    ('gpt2_model', 'gpt2_tokenizer'),
+    ('gemma2_model', 'gemma2_tokenizer'),
+    # ('llama3_model', 'llama3_tokenizer') # TODO: llama is now unavailable due to restriction to China
+])
+def test_greedy_decode_with_ngram_penalty(model_name, tokenizer_name, request):
     from src.decode import greedy_decode_with_ngram_penalty, greedy_decode_without_penalty
+
+    model = request.getfixturevalue(model_name)
+    tokenizer = request.getfixturevalue(tokenizer_name)
 
     prompt = "Once upon a time"
     max_length = 100
@@ -57,23 +66,24 @@ def test_greedy_decode_with_ngram_penalty(gpt2_model, gpt2_tokenizer):
     lmbda = 0.01
 
     generated_text_with_penalty = greedy_decode_with_ngram_penalty(
-        gpt2_model, gpt2_tokenizer, prompt, max_length, n, lmbda
+        model, tokenizer, prompt, max_length, n, lmbda
     )
 
     assert isinstance(generated_text_with_penalty, str)
     assert len(generated_text_with_penalty) > len(prompt)
 
     generated_text_without_penalty = greedy_decode_without_penalty(
-        gpt2_model, gpt2_tokenizer, prompt, max_length
+        model, tokenizer, prompt, max_length
     )
 
     assert isinstance(generated_text_without_penalty, str)
     assert len(generated_text_without_penalty) > len(prompt)
 
-    tokens_with_penalty = gpt2_tokenizer.encode(generated_text_with_penalty, add_special_tokens=False)
-    tokens_without_penalty = gpt2_tokenizer.encode(generated_text_without_penalty, add_special_tokens=False)
+    tokens_with_penalty = tokenizer.encode(generated_text_with_penalty, add_special_tokens=False)
+    tokens_without_penalty = tokenizer.encode(generated_text_without_penalty, add_special_tokens=False)
 
     assert rep_w(tokens_with_penalty, 20) < rep_w(tokens_without_penalty, 20)
     assert rep_r(tokens_with_penalty) < rep_r(tokens_without_penalty)
     assert rep_n(tokens_with_penalty, 5) < rep_n(tokens_without_penalty, 5)
+
 
