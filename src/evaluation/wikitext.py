@@ -1,6 +1,7 @@
 import dotenv
 import os
 from .dataset import Dataset
+from ..model.base_model import BaseModel
 
 dotenv.load_dotenv()
 
@@ -19,6 +20,7 @@ class WikitextDataset(Dataset):
         self.max_len = len(self.tokens)
 
     def __iter__(self):
+        self.offset = 0
         return self
     
     def __next__(self) -> tuple[str, str]:
@@ -30,4 +32,8 @@ class WikitextDataset(Dataset):
         self.offset += 1
         return (text_in, text_out)
 
+    def evaluate(self, model: BaseModel):
+        for (i, o) in iter(self):
+            generated = model.generate(i, max_length=self.output_window)
+            yield (generated, o)
 
