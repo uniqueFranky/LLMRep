@@ -1,0 +1,19 @@
+{
+    "model": "google/gemma-2-2b",
+    "decode_mode": "greedy",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 1.5836874814647488,
+        "meteor": 0.1373980304058194,
+        "perplexity": 1.2994564695059423,
+        "rep_w": 0.38586835927069973,
+        "rep_n_1": 0.7695478664086641,
+        "rep_n_2": 0.7258336271256647,
+        "rep_n_3": 0.7084625710886608,
+        "rep_n_4": 0.6946171530962819,
+        "rep_n_5": 0.6820283558518803,
+        "rep_r": 0.8852074458822722
+    },
+    "result_path": "results/iwslt_greedy_gemma2.jsonl",
+    "metrics_path": "results/iwslt_greedy_gemma2.jsonl.metrics.jsonl"
+}

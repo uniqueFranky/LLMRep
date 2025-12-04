@@ -93,6 +93,8 @@ class IWSLTDataset(Dataset):
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl --max-length=150 --decode-mode=penalty --max-samples=1000 --device=cuda:0
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_greedy_gemma2.jsonl --compute-metrics
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl --compute-metrics
+# python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl.metrics.jsonl --result-path2=results/iwslt_greedy_gemma2.jsonl.metrics.jsonl --compare-metrics
+
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
