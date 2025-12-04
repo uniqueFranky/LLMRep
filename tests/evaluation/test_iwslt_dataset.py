@@ -1,5 +1,7 @@
 from src.evaluation.iwslt import IWSLTDataset
 from src.model.greedy_decode_model import GreedyDecodeModel
+from src.model.decode_penalty_model import DecodePenaltyModel
+from src.decode import apply_ngram_penalty
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,6 +17,6 @@ def test_iteration():
 
 def test_evaluate(gemma2_model, gemma2_tokenizer):
     dataset = IWSLTDataset()
-    model = GreedyDecodeModel(gemma2_tokenizer, gemma2_model)
-    dataset.evaluate(model, result_path='/data/data_public/yrb/LLMRep/results/iwsl.json', max_length=200)
+    model = DecodePenaltyModel(gemma2_tokenizer, gemma2_model, penalty_func=apply_ngram_penalty)
+    dataset.evaluate(model, result_path='/data/data_public/yrb/LLMRep/results/iwsl-decode.jsonl', max_length=200)
 
