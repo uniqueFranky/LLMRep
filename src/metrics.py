@@ -36,3 +36,36 @@ def rep_r(tokens: Union[List[int], List[str]]) -> float:
     return rep / len(tokens)
 
 
+def bleu(pred: str, gold: str) -> float:
+    from sacrebleu import sentence_bleu
+    return sentence_bleu(pred, [gold]).score
+
+
+from evaluate import load
+# 加载 perplexity 指标
+_perplexity = load("perplexity", module_type="metric")
+
+def perplexity(pred: str, model_id: str) -> float:
+
+    # 计算
+    results = _perplexity.compute(
+        predictions=[pred],
+        model_id=model_id  # 或你的模型路径
+    )
+    return results['perplexities'][0]
+
+
+from evaluate import load
+_meteor = load("meteor")
+def meteor(pred: str, gold: str) -> float:
+
+    results = _meteor.compute(
+        predictions=[pred],
+        references=[gold]
+    )
+    return results['meteor']
+
+
+
+
+
