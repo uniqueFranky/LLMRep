@@ -1,0 +1,19 @@
+{
+    "model": "gpt2",
+    "decode_mode": "greedy",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 1.6764009447364805,
+        "meteor": 0.15268443718395996,
+        "perplexity": 3.9487506057845314,
+        "rep_w": 0.2639051743447505,
+        "rep_n_1": 0.5366566586442187,
+        "rep_n_2": 0.22398788938975892,
+        "rep_n_3": 0.06906246623196736,
+        "rep_n_4": 0.03150962129727305,
+        "rep_n_5": 0.01890063043989718,
+        "rep_r": 0.5386214733222816
+    },
+    "result_path": "results/nq_penlaty_gpt2.jsonl",
+    "metrics_path": "results/nq_penlaty_gpt2.jsonl.metrics.jsonl"
+}
