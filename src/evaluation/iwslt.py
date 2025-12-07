@@ -82,12 +82,24 @@ class IWSLTDataset(Dataset):
 
 
 
-# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_greedy_gpt2.jsonl --max-length=150 --decode-mode=greedy
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_greedy_gpt2.jsonl --max-length=150 --decode-mode=greedy --max-samples=1000
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_penlaty_gpt2.jsonl --max-length=150 --decode-mode=penalty
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_greedy_gpt2.jsonl --compute-metrics
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_penlaty_gpt2.jsonl --compute-metrics
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_penlaty_gpt2.jsonl.metrics.jsonl --result-path2=results/iwslt_greedy_gpt2.jsonl.metrics.jsonl --compare-metrics
 
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_gpt2.jsonl --max-length=150 --decode-mode=sae
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_gpt2_test.jsonl --compute-metrics
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_paper_gpt2.jsonl --max-length=150 --decode-mode=sae
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_paper_gpt2.jsonl --compute-metrics
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_temp_gpt2.jsonl --max-length=150 --decode-mode=sae
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_temp_gpt2.jsonl --compute-metrics
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_only_temp_gpt2_test.jsonl  --max-length=150 --decode-mode=sae --max-samples=1000
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_only_temp_gpt2_test.jsonl --compute-metrics
 
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_greedy_gemma2.jsonl --max-length=150 --decode-mode=greedy --max-samples=1000
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl --max-length=150 --decode-mode=penalty --max-samples=1000 --device=cuda:0
@@ -95,6 +107,10 @@ class IWSLTDataset(Dataset):
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl --compute-metrics
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl.metrics.jsonl --result-path2=results/iwslt_greedy_gemma2.jsonl.metrics.jsonl --compare-metrics
 
+
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=baseline/iwslt/greedy_gpt2.jsonl --max-length=150 --decode-mode=greedy --max-samples=1000
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_gpt2_test.jsonl --compute-metrics
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
@@ -280,6 +296,23 @@ if __name__ == '__main__':
         from src.model.decode_penalty_model import DecodePenaltyModel
         from src.decode import apply_ngram_penalty
         decode_model = DecodePenaltyModel(tokenizer, model, penalty_func=apply_ngram_penalty)
+    elif decode_mode == 'sae':
+        from src.model.sae_decode_model import SaeGreedyDecodeModel
+        if model_name == "gpt2":
+            latent_idxs = [22275, 6972, 8357, 3615, 13944, 7798, 10178, 22317, 18380, 16631, 3661, 16888, 3164, 6371, 17597, 16894, 12873, 7083, 5295, 8848, 17443, 23990, 18929, 21963, 15147, 10931, 4051, 4025, 20200, 186, 19336, 15875, 7699, 5051, 7770, 24312]
+            # latent_idxs = []
+            decode_model = SaeGreedyDecodeModel (
+                latent_idxs=latent_idxs,
+                steering_coefficient=-5,
+                sae_release="gpt2-small-res-jb",
+                sae_id="blocks.9.hook_resid_pre",
+                device="cuda",
+                decoding_mode="sample",
+                temperature=0.5,
+                freq_penalty=0.0,   
+            )            
+        else:
+            raise ValueError(f'Unsupported model : {model_name}')
     else:
         raise ValueError(f'Unsupported decode mode: {decode_mode}')
 
