@@ -59,10 +59,23 @@ class NeuronPreventModel(BaseModel):
                 # 计算当前序列的logits
                 raw_logits = compute_logits(self.model, self.tokenizer, generated)
 
-                # 计算概率分布（用于perplexity计算，使用原始logits）
-                log_probs = torch.log_softmax(raw_logits, dim=-1)
+                if raw_logits.dim() == 1:
+                    logits_2d = raw_logits.unsqueeze(0)  # [vocab_size] -> [1, vocab_size]
+                else:
+                    logits_2d = raw_logits
 
-                penalized_logits = raw_logits.clone()
+                penalized_logits_2d = raw_logits.clone()
+
+                # 转换回1维用于后续计算
+                if penalized_logits_2d.dim() == 2:
+                    penalized_logits = penalized_logits_2d.squeeze(0)
+                    original_logits = logits_2d.squeeze(0)
+                else:
+                    penalized_logits = penalized_logits_2d
+                    original_logits = raw_logits
+
+                # 计算概率分布（用于perplexity计算，使用原始logits）
+                log_probs = torch.log_softmax(original_logits, dim=-1)
 
                 # 选择下一个token（使用penalized logits）
                 next_token_id = torch.argmax(penalized_logits, dim=-1).item()
@@ -91,23 +104,6 @@ class NeuronPreventModel(BaseModel):
 
         return generated, perplexity
 
-    # def generateWithIntervention(model, tokenizer, initialInput, neurons, mode):
-    #
-    #
-    #
-    #
-    #
-    #
-    #     initialInput = torch.LongTensor([initialInput]).to(model.device)
-    #     generationConfigGreedy = GenerationConfig(max_new_tokens=(10 + 200 - 50), do_sample=False,
-    #                                               eos_token_id=model.config.eos_token_id)
-    #     additionalOutputs = model.generate(initialInput, generation_config=generationConfigGreedy)
-    #
-    #
-    #
-    #
-    #
-    #     return additionalOutputs[0].tolist()
 
     def generate(self, input: str, max_length: int = 100) -> str:
         """保持原有接口不变"""
