@@ -14,17 +14,29 @@ class OutputInspector:
 
 def getActs(model, tokenizer, inputIds):
     model.eval()
+
+    # if not all(0 <= t < tokenizer.vocab_size for t in inputIds):
+    #     raise ValueError(
+    #         f"inputIds 中存在越界 token，GPT2 vocab_size={tokenizer.vocab_size}，"
+    #         f"非法 tokens = {[t for t in inputIds if t >= tokenizer.vocab_size]}"
+    #     )
+
     with torch.no_grad():
-        if 'GemmaForCausalLM' in str(type(model)) or 'LlamaForCausalLM' in str(type(model)):
+        if 'GemmaForCausalLM' in str(type(model)) or 'Gemma2ForCausalLM' in str(type(model)) or 'LlamaForCausalLM' in str(type(model)):
             actInspectors = [OutputInspector(layer.mlp.act_fn) for layer in model.model.layers]
         elif 'GPTNeoXForCausalLM' in str(type(model)):
             actInspectors = [OutputInspector(layer.mlp.act) for layer in model.gpt_neox.layers]
         elif 'PhiForCausalLM' in str(type(model)):
             actInspectors = [OutputInspector(layer.mlp.activation_fn) for layer in model.model.layers]
+        elif 'GPT2LMHeadModel' in str(type(model)):
+            actInspectors = [OutputInspector(layer.mlp.act) for layer in model.transformer.h]
         else:
             print('model is not supported!')
 
         input_ids = torch.LongTensor([inputIds]).to(model.device)
+
+        # if tokenizer.pad_token is None:
+        #     tokenizer.pad_token = tokenizer.eos_token
 
         outputs = model(input_ids)
 

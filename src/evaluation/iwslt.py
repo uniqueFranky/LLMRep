@@ -6,6 +6,8 @@ import json
 import logging
 import argparse
 
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 

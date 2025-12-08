@@ -33,7 +33,7 @@ class NeuronPreventModel(BaseModel):
         layer2neurons = convertNeuronsToDict(self.targetNeurons)
 
         acts =[]
-        if 'GemmaForCausalLM' in str(type(model)) or 'LlamaForCausalLM' in str(type(model)):
+        if 'GemmaForCausalLM' in str(type(model)) or 'Gemma2ForCausalLM' in str(type(model)) or 'LlamaForCausalLM' in str(type(model)):
             acts = [INTERV(layer.mlp.act_fn, layer2neurons[i], 'last') for i, layer in enumerate(model.model.layers) if
                     i in layer2neurons]
         elif 'GPTNeoXForCausalLM' in str(type(model)):

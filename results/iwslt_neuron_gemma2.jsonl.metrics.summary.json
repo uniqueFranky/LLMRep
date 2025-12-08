@@ -1,18 +1,18 @@
 {
-    "model": "google/gemma-2b",
+    "model": "google/gemma-2-2b",
     "decode_mode": "greedy",
     "num_samples": 1000,
     "avg_metrics": {
-        "bleu": 1.2033029102346744,
-        "meteor": 0.1263070151883861,
-        "perplexity": 1.4258567630173489,
-        "rep_w": 0.34215258987238645,
-        "rep_n_1": 0.7816605895325688,
-        "rep_n_2": 0.7240822428990136,
-        "rep_n_3": 0.7037804086978043,
-        "rep_n_4": 0.6891519040753652,
-        "rep_n_5": 0.6771401221181309,
-        "rep_r": 0.8783634260982363
+        "bleu": 1.2742052803716686,
+        "meteor": 0.11659035766666258,
+        "perplexity": 1.3808651793352023,
+        "rep_w": 0.34436688177944763,
+        "rep_n_1": 0.7539590282572635,
+        "rep_n_2": 0.702214123374123,
+        "rep_n_3": 0.6784676149043779,
+        "rep_n_4": 0.6594989162543862,
+        "rep_n_5": 0.6418726688446034,
+        "rep_r": 0.8643698298418709
     },
     "result_path": "results/iwslt_neuron_gemma2.jsonl",
     "metrics_path": "results/iwslt_neuron_gemma2.jsonl.metrics.jsonl"
