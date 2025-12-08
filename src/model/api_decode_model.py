@@ -20,7 +20,7 @@ class APIDecodeModel(BaseModel):
         temperature: float = 1.0,
         top_k: int = 0,
         top_p: float = 1.0,
-        max_retries: int = 3,
+        max_retries: int = 10,
         timeout: int = 30,
     ):
         self.api_url = api_url
@@ -39,7 +39,7 @@ class APIDecodeModel(BaseModel):
     # ==============================================
     # BaseModel 接口 1: generate_with_perplexity
     # ==============================================
-    def generate_with_perplexity(self, input: str, max_length: int = 100):
+    def generate_with_perplexity(self, input: str, max_length: int = 100, with_prompt: bool=False):
 
         payload = {
             "model": self.model_name,

@@ -92,7 +92,7 @@ class SaeGreedyDecodeModel(BaseModel):
 
     # ====== your required function signature ======
     @torch.no_grad()
-    def generate_with_perplexity(self, input: str, max_length: int) -> tuple[str, float]:
+    def generate_with_perplexity(self, input: str, max_length: int, with_prompt: bool=False) -> tuple[str, float]:
         """
         签名不能改变：仅 input, max_length
         解码风格完全依赖 __init__ 中的配置（greedy vs sampling）
