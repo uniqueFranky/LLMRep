@@ -1,9 +1,12 @@
+import dotenv
 import argparse
 import os
 import sys
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 from pathlib import Path
+
+dotenv.load_dotenv()
 # 如果有本地模型，也可以导入
 # from src.model.greedy_decode_model import GreedyDecodeModel
 
@@ -17,7 +20,8 @@ def load_dataset(name: str):
         from src.evaluation.natural_questions import NaturalQuestionsDataset
         return NaturalQuestionsDataset(split='train')
     elif name == "eq":
-        pass
+        from src.evaluation.diversity_challenge import DiversityChallengeDataset
+        return DiversityChallengeDataset(split='train')
     else:
         raise ValueError(f'Unsupported dataset: {name}')
     
@@ -63,7 +67,7 @@ def main():
     parser.add_argument("--dataset", type=str, required=True, choices=["iwslt", "nq", "eq"], 
                         help="Dataset name. nq is Natural Questions, eq is Diversity_Challenge.")
     parser.add_argument('--model', type=str, required=True, 
-                        choices=["gpt2", "google/gemma-2-2b", "Qwen/Qwen3-32B"], 
+                        choices=["gpt2", "google/gemma-2-2b", "Qwen/Qwen3-32B", "tencent/Hunyuan-A13B-Instruct"], 
                         help='Model name')
     parser.add_argument("--result_dir", type=str, required=True, help="dir to save evaluation results, filename is result_dir/dataset/{{decode_mode}}_{{model}}.jsonl")
     parser.add_argument('--max-length', type=int, default=150, help='Maximum length for generation')
