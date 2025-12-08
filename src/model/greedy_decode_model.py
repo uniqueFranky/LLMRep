@@ -49,8 +49,11 @@ class GreedyDecodeModel(BaseModel):
             perplexity = math.exp(-avg_log_prob)
         else:
             perplexity = float('inf')
-        if with_prompt == False:
+        if with_prompt is False:
             generated_text = generated[len(input):] if len(generated) > len(input) else generated
+        else:
+            generated_text = generated
+
         return generated_text, perplexity
     
     def generate(self, input: str, max_length: int=100) -> str:
