@@ -286,7 +286,7 @@ if __name__ == '__main__':
         decode_model = DecodePenaltyModel(tokenizer, model, penalty_func=apply_ngram_penalty)
     elif decode_mode == 'neuron':
         from src.model.neuron_prevent_model import NeuronPreventModel
-        decode_model = NeuronPreventModel(tokenizer, model,dataset=os.getenv("REPETITION_DATASET"))
+        decode_model = NeuronPreventModel(tokenizer, model,dataset=f'{os.getenv("REPETITION_DATASET")}/{model_name}.pt')
     else:
         raise ValueError(f'Unsupported decode mode: {decode_mode}')
 

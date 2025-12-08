@@ -42,6 +42,9 @@ class NeuronPreventModel(BaseModel):
         elif 'PhiForCausalLM' in str(type(model)):
             acts = [INTERV(layer.mlp.activation_fn, layer2neurons[i], 'last') for i, layer in
                     enumerate(model.model.layers) if i in layer2neurons]
+        elif 'GPT2LMHeadModel' in str(type(model)):
+            acts = [INTERV(layer.mlp.act, layer2neurons[i], 'last') for i, layer in enumerate(model.transformer.h) if
+                    i in layer2neurons]
         else:
             print('model is not supported!')
 
