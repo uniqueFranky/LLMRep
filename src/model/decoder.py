@@ -33,13 +33,15 @@ class DecoderRegistry:
 
 @DecoderRegistry.register("greedy")
 class GreedyDecoder(BaseDecoder):
+    def __init__(self, **kwargs):
+        pass
     def __call__(self, logits: torch.Tensor) -> int:
         return torch.argmax(logits, dim=-1).item()
 
 
 @DecoderRegistry.register("top_k")
 class TopKDecoder(BaseDecoder):
-    def __init__(self, k: int):
+    def __init__(self, k: int, **kwargs):
         self.k = k
 
     def __call__(self, logits: torch.Tensor) -> int:
@@ -51,7 +53,7 @@ class TopKDecoder(BaseDecoder):
 
 @DecoderRegistry.register("top_p")
 class TopPDecoder(BaseDecoder):
-    def __init__(self, p: float):
+    def __init__(self, p: float, **kwargs):
         self.p = p
 
     def __call__(self, logits: torch.Tensor) -> int:

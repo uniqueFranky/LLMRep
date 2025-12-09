@@ -29,8 +29,8 @@ class DecodePenaltyConfig:
 
 @dataclass
 class SAEDepressionConfig:
-    latent_idxs: list[int] = None
-    steering_coefficient: float = -0.01
+    latent_idxs: list[int] = [22275, 6972, 8357, 3615, 13944, 7798, 10178, 22317, 18380, 16631, 3661, 16888, 3164, 6371, 17597, 16894, 12873, 7083, 5295, 8848, 17443, 23990, 18929, 21963, 15147, 10931, 4051, 4025, 20200, 186, 19336, 15875, 7699, 5051, 7770, 24312]
+    steering_coefficient: float = -0.5
     sae_release: str = "gpt2-small-res-jb"
     sae_id: str = "blocks.9.hook_resid_pre"
     device: str = "cuda:4"
