@@ -6,6 +6,8 @@ import json
 import logging
 import argparse
 
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -118,11 +120,12 @@ if __name__ == '__main__':
     argparser.add_argument('--result-path', type=str, required=True, help='Path to save evaluation results')
     argparser.add_argument('--result-path2', type=str, default=None, help='')
     argparser.add_argument('--max-length', type=int, default=150, help='Maximum length for generation')
-    argparser.add_argument('--decode-mode', type=str, default='greedy', help='Decoding mode: greedy, penalty.')
+    argparser.add_argument('--decode-mode', type=str, default='greedy', help='Decoding mode: greedy, penalty, neuron.')
     argparser.add_argument('--max-samples', type=int, default=-1, help='Maximum number of samples to evaluate, -1 for all.')
     argparser.add_argument('--compute-metrics', action='store_true', help='Only compute metrics from existing results if set.')
     argparser.add_argument('--compare-metrics', action='store_true', help='Only compare metrics from existing results if set.')
     argparser.add_argument('--device', type=str, default='auto', help='Device to use for model inference.')
+
     
     args = argparser.parse_args()
     model_name = args.model
@@ -313,6 +316,9 @@ if __name__ == '__main__':
             )            
         else:
             raise ValueError(f'Unsupported model : {model_name}')
+    elif decode_mode == 'neuron':
+        from src.model.neuron_prevent_model import NeuronPreventModel
+        decode_model = NeuronPreventModel(tokenizer, model,dataset=f'{os.getenv("REPETITION_DATASET")}/{model_name}.pt')
     else:
         raise ValueError(f'Unsupported decode mode: {decode_mode}')
 
