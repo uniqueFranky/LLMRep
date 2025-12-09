@@ -7,12 +7,13 @@ import math
 
 
 class NeuronPreventModel(BaseModel):
-    def __init__(self, tokenizer, model, dataset, K=1500):
+    def __init__(self, tokenizer, model, dataset, K=1500, device=None):
         self.tokenizer = tokenizer
         self.model = model
+        self.device = device or model.device
 
-        repetitionDataset = torch.load(dataset, map_location=self.model.device)
-        self.sortedNeurons = findNeurons(repetitionDataset, model, tokenizer, maxRange=30)
+        repetitionDataset = torch.load(dataset, map_location=self.device)
+        self.sortedNeurons = findNeurons(repetitionDataset, model, tokenizer, maxRange=30, device=self.device)
         self.targetNeurons = [neuron['neuron'] for neuron in self.sortedNeurons[:K]]
 
 

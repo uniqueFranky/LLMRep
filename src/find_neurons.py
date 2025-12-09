@@ -12,7 +12,7 @@ class OutputInspector:
   def release(self):
       self.featureHandle.remove()
 
-def getActs(model, tokenizer, inputIds):
+def getActs(model, tokenizer, inputIds, device=None):
     model.eval()
 
     # if not all(0 <= t < tokenizer.vocab_size for t in inputIds):
@@ -30,10 +30,13 @@ def getActs(model, tokenizer, inputIds):
             actInspectors = [OutputInspector(layer.mlp.activation_fn) for layer in model.model.layers]
         elif 'GPT2LMHeadModel' in str(type(model)):
             actInspectors = [OutputInspector(layer.mlp.act) for layer in model.transformer.h]
+        elif 'HookedTransformer' in str(type(model)):
+            # 添加对HookedTransformer的支持
+            actInspectors = [OutputInspector(layer.mlp.act_fn) for layer in model.blocks]
         else:
-            print('model is not supported!')
+            raise ValueError(f'model {str(type(model))} is not supported!')
 
-        input_ids = torch.LongTensor([inputIds]).to(model.device)
+        input_ids = torch.LongTensor([inputIds]).to(device or model.device)
 
         # if tokenizer.pad_token is None:
         #     tokenizer.pad_token = tokenizer.eos_token
@@ -47,7 +50,7 @@ def getActs(model, tokenizer, inputIds):
 
     return acts
 
-def getAveragedActivations(data, model, tokenizer, maxRange=30, position='first'):
+def getAveragedActivations(data, model, tokenizer, maxRange=30, position='first', device=None):
     repPosition = '%sPosition'%position
 
     normalActs = None
@@ -57,7 +60,7 @@ def getAveragedActivations(data, model, tokenizer, maxRange=30, position='first'
 
     for line in tqdm(data):
         inputIds = line['generatedIds']
-        acts = getActs(model, tokenizer, inputIds)
+        acts = getActs(model, tokenizer, inputIds, device=device)
         startingPoint = line[repPosition] - 1
         normalRange = list(range(max(0, startingPoint-maxRange), startingPoint))
         repetiRange = list(range(startingPoint, min(len(inputIds), startingPoint + maxRange)))
@@ -83,8 +86,8 @@ def getAveragedActivations(data, model, tokenizer, maxRange=30, position='first'
 
     return normalActs, repetiActs
 
-def findNeurons(data, model, tokenizer, maxRange=30, position='second'):
-    normalActs, repetiActs = getAveragedActivations(data, model, tokenizer, maxRange, position)
+def findNeurons(data, model, tokenizer, maxRange=30, position='second', device=None):
+    normalActs, repetiActs = getAveragedActivations(data, model, tokenizer, maxRange, position, device=device)
     diff = repetiActs - normalActs
     ranks = torch.argsort(diff.flatten(), descending=True)
     width = diff.shape[1]
