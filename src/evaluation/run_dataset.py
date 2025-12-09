@@ -58,6 +58,12 @@ def load_model(args):
             decode_model = TopKDecodeModel(tokenizer, model, top_k=30, temperature=0.5)
         else:
             decode_model = load_api_model(args.model, temperature=0.5, top_k=30, top_p=1.0)
+    elif args.decode_mode == "topp":
+        if args.model in ["gpt2", "google/gemma-2-2b"]:
+            from src.model.topp_decode_model import TopPDecodeModel
+            decode_model = TopPDecodeModel(tokenizer, model, top_p=0.9, temperature=0.5)
+        else:
+            decode_model = load_api_model(args.model, temperature=0.5, top_k=-1, top_p=0.9)
     elif args.decode_mode == "penalty":
         from src.model.decode_penalty_model import DecodePenaltyModel
         from src.decode import apply_ngram_penalty
@@ -73,7 +79,7 @@ def main():
     parser.add_argument("--dataset", type=str, required=True, choices=["iwslt", "nq", "eq"], 
                         help="Dataset name. nq is Natural Questions, eq is Diversity_Challenge.")
     parser.add_argument('--model', type=str, required=True, 
-                        choices=["gpt2", "google/gemma-2-2b", "Qwen/Qwen3-32B", "tencent/Hunyuan-A13B-Instruct"], 
+                        choices=["gpt2", "google/gemma-2-2b", "Qwen/Qwen3-8B", "Qwen/Qwen3-32B", "tencent/Hunyuan-A13B-Instruct", "deepseek-ai/DeepSeek-V3.2", "Qwen/Qwen3-235B-A22B-Instruct-2507"], 
                         help='Model name')
     parser.add_argument("--result_dir", type=str, required=True, help="dir to save evaluation results, filename is result_dir/dataset/{{decode_mode}}_{{model}}.jsonl")
     parser.add_argument('--max-length', type=int, default=150, help='Maximum length for generation')
