@@ -161,7 +161,7 @@ class HybridModel(BaseModel):
             self.hook_handle.remove()
             self.hook_handle = None
 
-    def generate_with_perplexity(self, input: str, max_length: int = 150) -> tuple[str, float]:
+    def generate_with_perplexity(self, input: str, max_length: int = 150, with_prompt: bool=False) -> tuple[str, float]:
         """
         生成文本并同时计算perplexity
         返回: (generated_text, perplexity)
