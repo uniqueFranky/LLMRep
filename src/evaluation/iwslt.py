@@ -208,6 +208,9 @@ if __name__ == '__main__':
                 pred = item['generated']
                 gold = item['expected']
                 
+                if len(pred.split()) == 0:
+                    continue
+                
                 # 计算指标
                 metric = {
                     'index': i,
