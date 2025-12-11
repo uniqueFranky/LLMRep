@@ -9,7 +9,7 @@ class GreedyDecodeModel(BaseModel):
         self.model = model
 
     
-    def generate_with_perplexity(self, input: str, max_length: int=100) -> tuple[str, float]:
+    def generate_with_perplexity(self, input: str, max_length: int=100, with_prompt: bool=False) -> tuple[str, float]:
         """
         生成文本并同时计算perplexity
         返回: (generated_text, perplexity)
@@ -49,8 +49,12 @@ class GreedyDecodeModel(BaseModel):
             perplexity = math.exp(-avg_log_prob)
         else:
             perplexity = float('inf')
-        
-        return generated, perplexity
+        if with_prompt is False:
+            generated_text = generated[len(input):] if len(generated) > len(input) else generated
+        else:
+            generated_text = generated
+
+        return generated_text, perplexity
     
     def generate(self, input: str, max_length: int=100) -> str:
         """保持原有接口不变"""

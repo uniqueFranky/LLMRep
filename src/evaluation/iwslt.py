@@ -57,14 +57,13 @@ class IWSLTDataset(Dataset):
             if max_samples > 0 and cnt > max_samples:
                 break
             input_text = "Translate the following texts in Germany into English: " + i
-            
             # 推理
             generated, ppl = model.generate_with_perplexity(input_text, max_length=max_length)
             
             # 处理生成结果（去掉 prompt 部分）
             # 注意：建议加个判断，防止切片报错
-            generated_text = generated[len(input_text):] if len(generated) > len(input_text) else generated
-            
+            # generated_text = generated[len(input_text):] if len(generated) > len(input_text) else generated
+            generated_text = generated
             current_result = {
                 'input': input_text,
                 'expected': o,

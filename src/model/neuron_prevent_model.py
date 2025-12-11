@@ -17,7 +17,7 @@ class NeuronPreventModel(BaseModel):
         self.targetNeurons = [neuron['neuron'] for neuron in self.sortedNeurons[:K]]
 
 
-    def generate_with_perplexity(self, input: str, max_length: int = 100) -> tuple[str, float]:
+    def generate_with_perplexity(self, input: str, max_length: int = 100, with_prompt: bool=False) -> tuple[str, float]:
         """
         生成文本并同时计算perplexity
         返回: (generated_text, perplexity)
