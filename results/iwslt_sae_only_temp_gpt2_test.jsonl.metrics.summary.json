@@ -1,18 +1,18 @@
 {
     "model": "gpt2",
     "decode_mode": "greedy",
-    "num_samples": 1000,
+    "num_samples": 25,
     "avg_metrics": {
-        "bleu": 0.555350869397444,
-        "meteor": 0.10596732755455293,
-        "perplexity": 5.099795942649728,
-        "rep_w": 0.262608610882728,
-        "rep_n_1": 0.6044998849141413,
-        "rep_n_2": 0.40430477643792206,
-        "rep_n_3": 0.31882487590616143,
-        "rep_n_4": 0.2731278092168137,
-        "rep_n_5": 0.24109828451721707,
-        "rep_r": 0.6643295527184641
+        "bleu": 0.5450705448197574,
+        "meteor": 0.07895619171965759,
+        "perplexity": 1.5368777961071276,
+        "rep_w": 0.4983774616798602,
+        "rep_n_1": 0.785349951698191,
+        "rep_n_2": 0.7385779500112818,
+        "rep_n_3": 0.7195929844014575,
+        "rep_n_4": 0.7103905673636508,
+        "rep_n_5": 0.7025343533704447,
+        "rep_r": 0.9057596788092609
     },
     "result_path": "results/iwslt_sae_only_temp_gpt2_test.jsonl",
     "metrics_path": "results/iwslt_sae_only_temp_gpt2_test.jsonl.metrics.jsonl"

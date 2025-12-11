@@ -4,8 +4,7 @@ import math
 import torch.nn.functional as F
 
 from transformers import AutoTokenizer
-from transformer_lens import HookedTransformer
-from sae_lens import SAE
+from sae_lens import SAE, HookedSAETransformer
 
 
 class SaeGreedyDecodeModel(BaseModel):
@@ -49,7 +48,7 @@ class SaeGreedyDecodeModel(BaseModel):
         model_kwargs = self.sae.cfg.metadata.get("model_from_pretrained_kwargs", {}) or {}
 
         # ===== load transformer =====
-        self.model = HookedTransformer.from_pretrained(
+        self.model = HookedSAETransformer.from_pretrained(
             model_name,
             device=device,
             **model_kwargs,

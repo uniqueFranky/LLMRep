@@ -21,9 +21,11 @@ class DecodePenaltyConfig:
     def __post_init__(self):
         if self.penalty_dict is None:
             self.penalty_dict = {
-                3: 0.9,
-                4: 0.8,
-                5: 0.7,
+                3: 0.8,
+                4: 0.7,
+                5: 0.6,
+                6: 0.5,
+                7: 0.4,
             }
 
 
@@ -99,8 +101,11 @@ class HybridModel(BaseModel):
         
         # 解析hook_name来找到对应的层
         # 例如: "blocks.9.hook_resid_pre" -> layer 9
-        if "blocks." in hook_name:
-            layer_idx = int(hook_name.split(".")[1])
+        if "blocks." in hook_name or 'layer_' in hook_name:
+            if "blocks." in hook_name:
+                layer_idx = int(hook_name.split(".")[1])
+            else:
+                layer_idx = int(hook_name.split("_")[1].split("/")[0])
             
             # 根据模型类型找到对应的层
             model_type = str(type(self.model))
@@ -114,7 +119,9 @@ class HybridModel(BaseModel):
                 self.target_module = self.model.model.layers[layer_idx]
             else:
                 raise ValueError(f"Model type {model_type} not supported for SAE depression")
-
+        else:
+            raise ValueError(f"Unsupported hook name format: {hook_name}")
+        
         # 设置tokenizer
         if not hasattr(self.tokenizer, 'pad_token') or self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
