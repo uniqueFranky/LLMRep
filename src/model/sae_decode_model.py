@@ -58,16 +58,14 @@ class SaeGreedyDecodeModel(BaseModel):
         self.tokenizer = AutoTokenizer.from_pretrained("gpt2")
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        # ===== steering vector =====
-        with torch.no_grad():
-            steer_vec = torch.zeros(self.sae.W_dec.shape[1], device=device)
-            for idx in latent_idxs:
-                steer_vec += self.sae.W_dec[idx]
-            self.steer_vec = self.steering_coefficient * steer_vec
-
     # steering hook
     def _steering_hook(self, activations, hook):
-        activations = activations + self.steer_vec
+        # print(f"before : {activations}")
+        # activations = activations + self.steer_vec
+        for latent_idx in self.latent_idxs:
+            activations += self.steering_coefficient * self.sae.W_dec[latent_idx]
+        # print(f"after : {activations}")
+
         return activations
 
     # decoding
@@ -103,7 +101,7 @@ class SaeGreedyDecodeModel(BaseModel):
         total_log_prob = 0.0
         num_tokens = 0
 
-        for _ in range(max_length):
+        for step in range(max_length):
 
             with self.model.hooks(fwd_hooks=[(self.hook_name, self._steering_hook)]):
 
@@ -113,18 +111,20 @@ class SaeGreedyDecodeModel(BaseModel):
 
             # decode next token using mode set in init
             next_token_id = self._decode_token(next_logits, generated_ids)
-
-            total_log_prob += log_probs[next_token_id].item()
-            num_tokens += 1
+            if step > 0:
+                total_log_prob += log_probs[next_token_id].item()
+                num_tokens += 1
 
             next_token_tensor = torch.tensor([[next_token_id]], device=self.device)
             generated_ids = torch.cat([generated_ids, next_token_tensor], dim=1)
 
             if next_token_id == self.tokenizer.eos_token_id:
                 break
-
-        avg_log_prob = total_log_prob / max(num_tokens, 1)
-        ppl = math.exp(-avg_log_prob)
+        if num_tokens > 0:
+            avg_log_prob = total_log_prob / num_tokens
+            ppl = math.exp(-avg_log_prob)
+        else:
+            ppl = float('inf')
 
         text = self.tokenizer.decode(generated_ids[0], skip_special_tokens=True)
         return text, ppl
