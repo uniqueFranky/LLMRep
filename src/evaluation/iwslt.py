@@ -208,6 +208,9 @@ if __name__ == '__main__':
                 pred = item['generated']
                 gold = item['expected']
                 
+                if len(pred.split()) == 0:
+                    continue
+                
                 # 计算指标
                 metric = {
                     'index': i,
@@ -309,8 +312,8 @@ if __name__ == '__main__':
                 sae_release="gpt2-small-res-jb",
                 sae_id="blocks.9.hook_resid_pre",
                 device="cuda",
-                decoding_mode="sample",
-                temperature=0.5,
+                decoding_mode="greedy",
+                temperature=1,
                 freq_penalty=0.0,   
             )            
         else:

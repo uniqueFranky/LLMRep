@@ -11,7 +11,7 @@ if __name__ == '__main__':
                         'python', '-m', 'src.evaluation.hybrid_iwslt',
                         '--model', 'gpt2',
                         '--dataset', 'iwslt',
-                        '--device', 'cuda:4',
+                        '--device', 'cuda:6',
                         '--max-samples', '1000',
                         '--output-file', f'hybrid_results/iwslt_{"penalty" if use_penalty else "no_penalty"}_{"sae" if use_sae else "no_sae"}_{"neuron" if use_neuron else "no_neuron"}_{decoder}.jsonl',
                         '--decode-strategy', decoder,

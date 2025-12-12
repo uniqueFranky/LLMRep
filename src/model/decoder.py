@@ -41,8 +41,8 @@ class GreedyDecoder(BaseDecoder):
 
 @DecoderRegistry.register("top_k")
 class TopKDecoder(BaseDecoder):
-    def __init__(self, k: int, **kwargs):
-        self.k = k
+    def __init__(self, **kwargs):
+        self.k = kwargs.get("k", 3)
 
     def __call__(self, logits: torch.Tensor) -> int:
         topk_values, topk_indices = torch.topk(logits, self.k, dim=-1)
@@ -53,27 +53,31 @@ class TopKDecoder(BaseDecoder):
 
 @DecoderRegistry.register("top_p")
 class TopPDecoder(BaseDecoder):
-    def __init__(self, p: float, **kwargs):
-        self.p = p
+    def __init__(self, **kwargs):
+        self.p = kwargs.get("p", 0.9)
 
     def __call__(self, logits: torch.Tensor) -> int:
         probs = torch.softmax(logits, dim=-1)
         sorted_probs, sorted_indices = torch.sort(probs, descending=True)
         cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
         
+        # 找到累积概率超过 p 的位置
         mask = cumulative_probs <= self.p
+        # 确保至少包含一个 token
         if not mask.any():
             mask[0] = True
         else:
-            first_false = (~mask).nonzero(as_tuple=True)[0]
-            if len(first_false) > 0:
-                mask[first_false[0]] = True
+            # 包含第一个使累积概率超过 p 的 token
+            last_included = mask.sum().item()
+            if last_included < len(mask):
+                mask[last_included] = True
         
         filtered_indices = sorted_indices[mask]
         filtered_probs = sorted_probs[mask]
         filtered_probs = filtered_probs / filtered_probs.sum()
         sampled_index = torch.multinomial(filtered_probs, num_samples=1)
         return filtered_indices[sampled_index].item()
+
 
 
 # 使用示例
