@@ -1,0 +1,19 @@
+{
+    "model": "gemma-2-2b",
+    "decode_mode": "penalty",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 2.2674839497188075,
+        "meteor": 0.162803578942797,
+        "perplexity": 2.7739058338041245,
+        "rep_w": 0.18788609644278984,
+        "rep_n_1": 0.47177642197308284,
+        "rep_n_2": 0.20123739860013773,
+        "rep_n_3": 0.08746055340808181,
+        "rep_n_4": 0.03434784247074271,
+        "rep_n_5": 0.012349768872427423,
+        "rep_r": 0.46116124694772226
+    },
+    "result_path": "test_results_new/nq/penalty_gemma-2-2b.jsonl",
+    "metrics_path": "test_results_new/nq/penalty_gemma-2-2b_metrics.jsonl"
+}

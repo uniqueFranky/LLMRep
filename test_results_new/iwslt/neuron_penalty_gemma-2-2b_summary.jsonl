@@ -1,0 +1,19 @@
+{
+    "model": "penalty_gemma-2-2b",
+    "decode_mode": "neuron",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 1.4090663765499998,
+        "meteor": 0.15502654290172585,
+        "perplexity": 3.0232918090577936,
+        "rep_w": 0.24364141552312624,
+        "rep_n_1": 0.43585758270091257,
+        "rep_n_2": 0.22027177748834997,
+        "rep_n_3": 0.12276545858023744,
+        "rep_n_4": 0.06228855624322167,
+        "rep_n_5": 0.028163831649045904,
+        "rep_r": 0.4215088886326152
+    },
+    "result_path": "test_results_new/iwslt/neuron_penalty_gemma-2-2b.jsonl",
+    "metrics_path": "test_results_new/iwslt/neuron_penalty_gemma-2-2b_metrics.jsonl"
+}

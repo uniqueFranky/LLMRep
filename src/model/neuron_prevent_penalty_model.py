@@ -20,7 +20,12 @@ class NeuronPreventPenaltyModel(BaseModel):
         self.sortedNeurons = findNeurons(repetitionDataset, model, tokenizer, maxRange=30, device=self.device)
 
         if K == -1:
-            K = int(len(self.sortedNeurons) * 0.1)
+            if 'GemmaForCausalLM' in str(type(model)) or 'Gemma2ForCausalLM' in str(type(model)) or 'LlamaForCausalLM' in str(type(model)):
+                K=int(len(self.sortedNeurons) * 0.1)
+            elif 'GPT2LMHeadModel' in str(type(model)):
+                K=int(len(self.sortedNeurons) * 0.03)
+            else:
+                print('model is not supported!')
         self.targetNeurons = [neuron['neuron'] for neuron in self.sortedNeurons[:K]]
 
 
@@ -101,6 +106,9 @@ class NeuronPreventPenaltyModel(BaseModel):
             perplexity = math.exp(-avg_log_prob)
         else:
             perplexity = float('inf')
+
+        if with_prompt is False:
+            generated = generated[input_length:]
 
         return generated, perplexity
 

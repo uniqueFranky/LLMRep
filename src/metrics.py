@@ -5,6 +5,8 @@ def rep_w(tokens: Union[List[int], List[str]], w: int) -> float:
     tokens: token_id 或 token本身
     w: 窗口长度
     """
+    if len(tokens) == 0:
+        return 0.0
     rep = 0
     for i in range(len(tokens)):
         if tokens[i] in tokens[max(0, i - w): i]:
@@ -25,6 +27,8 @@ def rep_n(tokens: Union[List[int], List[str]], n: int) -> float:
 
 
 def rep_r(tokens: Union[List[int], List[str]]) -> float:
+    if len(tokens) == 0:
+        return 0.0
     rep = 0
     for i in range(len(tokens)):
         for j in range(len(tokens)):

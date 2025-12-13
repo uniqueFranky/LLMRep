@@ -1,0 +1,19 @@
+{
+    "model": "penalty_gpt2",
+    "decode_mode": "neuron",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 1.7110401462144764,
+        "meteor": 0.1676950079253747,
+        "perplexity": Infinity,
+        "rep_w": 0.21254905692630738,
+        "rep_n_1": 0.5136595954399321,
+        "rep_n_2": 0.23707289243319332,
+        "rep_n_3": 0.11066172849585511,
+        "rep_n_4": 0.048023652517931524,
+        "rep_n_5": 0.01824897703710194,
+        "rep_r": 0.5275836018769613
+    },
+    "result_path": "test_results_new/nq/neuron_penalty_gpt2.jsonl",
+    "metrics_path": "test_results_new/nq/neuron_penalty_gpt2_metrics.jsonl"
+}

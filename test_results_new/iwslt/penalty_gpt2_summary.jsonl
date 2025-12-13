@@ -1,0 +1,19 @@
+{
+    "model": "gpt2",
+    "decode_mode": "penalty",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 0.580198090547007,
+        "meteor": 0.0875078533816713,
+        "perplexity": 3.9357219388607647,
+        "rep_w": 0.299893931499965,
+        "rep_n_1": 0.5982009167085738,
+        "rep_n_2": 0.3228193029359573,
+        "rep_n_3": 0.1618092538938688,
+        "rep_n_4": 0.07690291650572226,
+        "rep_n_5": 0.034282693136180244,
+        "rep_r": 0.6641256608188223
+    },
+    "result_path": "test_results_new/iwslt/penalty_gpt2.jsonl",
+    "metrics_path": "test_results_new/iwslt/penalty_gpt2_metrics.jsonl"
+}

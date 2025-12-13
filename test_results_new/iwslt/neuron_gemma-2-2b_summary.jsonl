@@ -1,0 +1,19 @@
+{
+    "model": "gemma-2-2b",
+    "decode_mode": "neuron",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 1.4628290621166422,
+        "meteor": 0.15567072004104804,
+        "perplexity": 2.4293732524475633,
+        "rep_w": 0.27706160710074373,
+        "rep_n_1": 0.48851644409707595,
+        "rep_n_2": 0.3176317734746313,
+        "rep_n_3": 0.24629075842615517,
+        "rep_n_4": 0.1978981404240226,
+        "rep_n_5": 0.1615160414547773,
+        "rep_r": 0.5077133430774615
+    },
+    "result_path": "test_results_new/iwslt/neuron_gemma-2-2b.jsonl",
+    "metrics_path": "test_results_new/iwslt/neuron_gemma-2-2b_metrics.jsonl"
+}

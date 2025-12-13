@@ -58,7 +58,7 @@ def main():
         latent_idxs = [3350, 2424, 2752, 11566, 11653, 3050, 11018, 1563, 3996, 13589, 7644, 15662, 13000, 13032, 2210, 15312, 12056, 2205, 13513, 94, 421, 3858, 4884, 12653, 10243, 5263, 6608, 9423, 10860, 11592, 7637, 7618, 14613, 8065, 8509, 7341, 2645, 15954, 1988, 5490, 11985, 16300, 4017, 11076, 5425, 11049, 5429, 9227, 9795, 10178, 10566, 11073, 13907, 16094, 4946, 6129, 630, 7543, 1883, 8280, 14727, 12656, 12493, 7704, 13775, 1008, 6206, 7624, 11423, 14848, 14950, 2678, 3440, 4051, 7827, 8575, 13593, 16186, 13586, 16105, 6789, 147, 514, 1000, 7470, 15037, 577, 1447, 1007, 2632, 4071, 4807, 5964, 6954, 10744, 12099, 12827, 14148, 1365, 6023]
 
     tokenizer = AutoTokenizer.from_pretrained(args.model)
-    hybrid_model = SaeDecodePenaltyModel(decoder, tokenizer=tokenizer, latent_idxs=latent_idxs, penalty_config=penalty_config, steering_coefficient=-2, sae_release=release, sae_id=sae_id, device=args.device)
+    hybrid_model = SaeDecodePenaltyModel(decoder, tokenizer=tokenizer, latent_idxs=latent_idxs, penalty_config=penalty_config, steering_coefficient=-4, sae_release=release, sae_id=sae_id, device=args.device)
     dataset = IWSLTDataset(split='test')
     dataset.evaluate(hybrid_model, args.output_file, max_samples=args.max_samples, max_length=args.max_length)
 

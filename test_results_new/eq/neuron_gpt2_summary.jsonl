@@ -1,0 +1,19 @@
+{
+    "model": "gpt2",
+    "decode_mode": "neuron",
+    "num_samples": 500,
+    "avg_metrics": {
+        "bleu": 0.0,
+        "meteor": 0.0,
+        "perplexity": 3.8217142272576967,
+        "rep_w": 0.2555845576047848,
+        "rep_n_1": 0.5086312619502384,
+        "rep_n_2": 0.30977291962365666,
+        "rep_n_3": 0.21925368730202352,
+        "rep_n_4": 0.16373990520380555,
+        "rep_n_5": 0.1261548018417971,
+        "rep_r": 0.5415667749580447
+    },
+    "result_path": "test_results_new/eq/neuron_gpt2.jsonl",
+    "metrics_path": "test_results_new/eq/neuron_gpt2_metrics.jsonl"
+}

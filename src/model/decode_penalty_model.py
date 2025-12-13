@@ -1,15 +1,16 @@
 from .base_model import BaseModel
 from ..decode import compute_logits
+from .decoder import BaseDecoder
+from src.decode import apply_ngram_penalty
 import torch
 import math
 
 class DecodePenaltyModel(BaseModel):
-    def __init__(self, tokenizer, model, penalty_func, n=3, lmda=0.1):
+    def __init__(self, tokenizer, model, penalty_config: dict[int, float], decoder: BaseDecoder):
         self.tokenizer = tokenizer
         self.model = model
-        self.penalty_func = penalty_func
-        self.n = n
-        self.lmda = lmda
+        self.penalty_config = penalty_config
+        self.decoder = decoder
     
     def generate_with_perplexity(self, input: str, max_length: int=100, with_prompt: bool=False) -> tuple[str, float]:
         """
@@ -29,28 +30,16 @@ class DecodePenaltyModel(BaseModel):
                 # 计算当前序列的logits
                 raw_logits = compute_logits(self.model, self.tokenizer, generated)
                 
-                # 确保logits是2维的，用于penalty函数
-                if raw_logits.dim() == 1:
-                    logits_2d = raw_logits.unsqueeze(0)  # [vocab_size] -> [1, vocab_size]
-                else:
-                    logits_2d = raw_logits
-                
-                # 应用penalty（使用2维logits）
-                penalized_logits_2d = self.penalty_func(generated, self.tokenizer, logits_2d, self.n, self.lmda)
-                
-                # 转换回1维用于后续计算
-                if penalized_logits_2d.dim() == 2:
-                    penalized_logits = penalized_logits_2d.squeeze(0)
-                    original_logits = logits_2d.squeeze(0)
-                else:
-                    penalized_logits = penalized_logits_2d
-                    original_logits = raw_logits
-                
+                penalized_logits = raw_logits.clone()
+                if self.penalty_config:
+                    for ngram_size, penalty in self.penalty_config.items():
+                        penalized_logits = apply_ngram_penalty(generated, self.tokenizer, penalized_logits, ngram_size, penalty)
+
                 # 计算概率分布（用于perplexity计算，使用原始logits）
-                log_probs = torch.log_softmax(original_logits, dim=-1)
-                
+                log_probs = torch.log_softmax(raw_logits, dim=-1).squeeze(0)
+
                 # 选择下一个token（使用penalized logits）
-                next_token_id = torch.argmax(penalized_logits, dim=-1).item()
+                next_token_id = self.decoder(penalized_logits.squeeze(0))
                 next_token = self.tokenizer.decode([next_token_id])
                 
                 # 累积log probability

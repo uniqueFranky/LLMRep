@@ -43,12 +43,18 @@ class GreedyDecoder(BaseDecoder):
 class TopKDecoder(BaseDecoder):
     def __init__(self, **kwargs):
         self.k = kwargs.get("k", 3)
+        self.temp = kwargs.get("temperature", 1.0)
 
     def __call__(self, logits: torch.Tensor) -> int:
-        topk_values, topk_indices = torch.topk(logits, self.k, dim=-1)
-        topk_probs = torch.softmax(topk_values, dim=-1)
-        sampled_index = torch.multinomial(topk_probs, num_samples=1)
-        return topk_indices[sampled_index].item()
+        logits /= self.temp
+        if self.k != -1:
+            topk_values, topk_indices = torch.topk(logits, self.k, dim=-1)
+            topk_probs = torch.softmax(topk_values, dim=-1)
+            sampled_index = torch.multinomial(topk_probs, num_samples=1)
+            return topk_indices[sampled_index].item()
+        else:
+            return torch.multinomial(torch.softmax(logits, dim=-1), num_samples=1)
+        
 
 
 @DecoderRegistry.register("top_p")

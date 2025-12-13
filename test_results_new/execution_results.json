@@ -1,0 +1,251 @@
+{
+  "timestamp": "2025-12-13T01:56:50.565465",
+  "completed_tasks": [
+    {
+      "task_id": 5,
+      "task_name": "Task-005_iwslt_gpt2_neuron",
+      "dataset": "iwslt",
+      "model": "gpt2",
+      "decode_mode": "neuron",
+      "device": "cuda:5",
+      "duration": 1508.8637268543243,
+      "status": "success"
+    },
+    {
+      "task_id": 4,
+      "task_name": "Task-004_iwslt_gpt2_penalty",
+      "dataset": "iwslt",
+      "model": "gpt2",
+      "decode_mode": "penalty",
+      "device": "cuda:4",
+      "duration": 1580.1241354942322,
+      "status": "success"
+    },
+    {
+      "task_id": 6,
+      "task_name": "Task-006_iwslt_gpt2_sae_penalty",
+      "dataset": "iwslt",
+      "model": "gpt2",
+      "decode_mode": "sae_penalty",
+      "device": "cuda:6",
+      "duration": 3068.2842478752136,
+      "status": "success"
+    },
+    {
+      "task_id": 7,
+      "task_name": "Task-007_iwslt_gpt2_neuron_penalty",
+      "dataset": "iwslt",
+      "model": "gpt2",
+      "decode_mode": "neuron_penalty",
+      "device": "cuda:5",
+      "duration": 1818.6332244873047,
+      "status": "success"
+    },
+    {
+      "task_id": 8,
+      "task_name": "Task-008_eq_google_gemma-2-2b_penalty",
+      "dataset": "eq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "penalty",
+      "device": "cuda:4",
+      "duration": 2437.8152120113373,
+      "status": "success"
+    },
+    {
+      "task_id": 0,
+      "task_name": "Task-000_iwslt_google_gemma-2-2b_penalty",
+      "dataset": "iwslt",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "penalty",
+      "device": "cuda:0",
+      "duration": 4125.207743406296,
+      "status": "success"
+    },
+    {
+      "task_id": 12,
+      "task_name": "Task-012_eq_gpt2_penalty",
+      "dataset": "eq",
+      "model": "gpt2",
+      "decode_mode": "penalty",
+      "device": "cuda:0",
+      "duration": 828.5986175537109,
+      "status": "success"
+    },
+    {
+      "task_id": 1,
+      "task_name": "Task-001_iwslt_google_gemma-2-2b_neuron",
+      "dataset": "iwslt",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "neuron",
+      "device": "cuda:1",
+      "duration": 5667.287605762482,
+      "status": "success"
+    },
+    {
+      "task_id": 13,
+      "task_name": "Task-013_eq_gpt2_neuron",
+      "dataset": "eq",
+      "model": "gpt2",
+      "decode_mode": "neuron",
+      "device": "cuda:0",
+      "duration": 741.5476160049438,
+      "status": "success"
+    },
+    {
+      "task_id": 3,
+      "task_name": "Task-003_iwslt_google_gemma-2-2b_neuron_penalty",
+      "dataset": "iwslt",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "neuron_penalty",
+      "device": "cuda:3",
+      "duration": 5715.788183450699,
+      "status": "success"
+    },
+    {
+      "task_id": 9,
+      "task_name": "Task-009_eq_google_gemma-2-2b_neuron",
+      "dataset": "eq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "neuron",
+      "device": "cuda:6",
+      "duration": 3398.391936302185,
+      "status": "success"
+    },
+    {
+      "task_id": 15,
+      "task_name": "Task-015_eq_gpt2_neuron_penalty",
+      "dataset": "eq",
+      "model": "gpt2",
+      "decode_mode": "neuron_penalty",
+      "device": "cuda:0",
+      "duration": 825.4373331069946,
+      "status": "success"
+    },
+    {
+      "task_id": 2,
+      "task_name": "Task-002_iwslt_google_gemma-2-2b_sae_penalty",
+      "dataset": "iwslt",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "sae_penalty",
+      "device": "cuda:2",
+      "duration": 6618.704040765762,
+      "status": "success"
+    },
+    {
+      "task_id": 14,
+      "task_name": "Task-014_eq_gpt2_sae_penalty",
+      "dataset": "eq",
+      "model": "gpt2",
+      "decode_mode": "sae_penalty",
+      "device": "cuda:1",
+      "duration": 1446.966492652893,
+      "status": "success"
+    },
+    {
+      "task_id": 10,
+      "task_name": "Task-010_eq_google_gemma-2-2b_sae_penalty",
+      "dataset": "eq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "sae_penalty",
+      "device": "cuda:5",
+      "duration": 3821.1231174468994,
+      "status": "success"
+    },
+    {
+      "task_id": 11,
+      "task_name": "Task-011_eq_google_gemma-2-2b_neuron_penalty",
+      "dataset": "eq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "neuron_penalty",
+      "device": "cuda:4",
+      "duration": 3567.976072072983,
+      "status": "success"
+    },
+    {
+      "task_id": 20,
+      "task_name": "Task-020_nq_gpt2_penalty",
+      "dataset": "nq",
+      "model": "gpt2",
+      "decode_mode": "penalty",
+      "device": "cuda:1",
+      "duration": 1485.7903935909271,
+      "status": "success"
+    },
+    {
+      "task_id": 21,
+      "task_name": "Task-021_nq_gpt2_neuron",
+      "dataset": "nq",
+      "model": "gpt2",
+      "decode_mode": "neuron",
+      "device": "cuda:5",
+      "duration": 1533.1525588035583,
+      "status": "success"
+    },
+    {
+      "task_id": 23,
+      "task_name": "Task-023_nq_gpt2_neuron_penalty",
+      "dataset": "nq",
+      "model": "gpt2",
+      "decode_mode": "neuron_penalty",
+      "device": "cuda:1",
+      "duration": 1757.5588595867157,
+      "status": "success"
+    },
+    {
+      "task_id": 16,
+      "task_name": "Task-016_nq_google_gemma-2-2b_penalty",
+      "dataset": "nq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "penalty",
+      "device": "cuda:3",
+      "duration": 4767.002646446228,
+      "status": "success"
+    },
+    {
+      "task_id": 22,
+      "task_name": "Task-022_nq_gpt2_sae_penalty",
+      "dataset": "nq",
+      "model": "gpt2",
+      "decode_mode": "sae_penalty",
+      "device": "cuda:4",
+      "duration": 2962.249178171158,
+      "status": "success"
+    },
+    {
+      "task_id": 19,
+      "task_name": "Task-019_nq_google_gemma-2-2b_neuron_penalty",
+      "dataset": "nq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "neuron_penalty",
+      "device": "cuda:2",
+      "duration": 6812.964948177338,
+      "status": "success"
+    },
+    {
+      "task_id": 17,
+      "task_name": "Task-017_nq_google_gemma-2-2b_neuron",
+      "dataset": "nq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "neuron",
+      "device": "cuda:6",
+      "duration": 6985.892727136612,
+      "status": "success"
+    },
+    {
+      "task_id": 18,
+      "task_name": "Task-018_nq_google_gemma-2-2b_sae_penalty",
+      "dataset": "nq",
+      "model": "google/gemma-2-2b",
+      "decode_mode": "sae_penalty",
+      "device": "cuda:0",
+      "duration": 7402.228716135025,
+      "status": "success"
+    }
+  ],
+  "failed_tasks": [],
+  "summary": {
+    "total": 24,
+    "success": 24,
+    "failed": 0
+  }
+}

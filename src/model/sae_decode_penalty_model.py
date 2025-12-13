@@ -16,7 +16,7 @@ class SaeDecodePenaltyModel(BaseModel):
         tokenizer: AutoTokenizer,
         latent_idxs,
         penalty_config: dict[int, float]=None,
-        steering_coefficient: float = -0.01,
+        steering_coefficient: float = -4,
         sae_release: str = "gpt2-small-res-jb",
         sae_id: str = "blocks.9.hook_resid_pre",
         device: str = "cuda",
@@ -55,17 +55,11 @@ class SaeDecodePenaltyModel(BaseModel):
         self.tokenizer = tokenizer
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        # ===== steering vector =====
-        with torch.no_grad():
-            steer_vec = torch.zeros(self.sae.W_dec.shape[1], device=device)
-            for idx in latent_idxs:
-                steer_vec += self.sae.W_dec[idx]
-            self.steer_vec = self.steering_coefficient * steer_vec
 
     # steering hook
     def _steering_hook(self, activations, hook):
-        activations = activations + self.steer_vec
-        return activations
+        for latent_idx in self.latent_idxs:
+            activations += self.steering_coefficient * self.sae.W_dec[latent_idx]
 
     # ====== your required function signature ======
     @torch.no_grad()
@@ -81,7 +75,7 @@ class SaeDecodePenaltyModel(BaseModel):
         total_log_prob = 0.0
         num_tokens = 0
 
-        for _ in range(max_length):
+        for step in range(max_length):
 
             with self.model.hooks(fwd_hooks=[(self.hook_name, self._steering_hook)]):
 
@@ -98,12 +92,13 @@ class SaeDecodePenaltyModel(BaseModel):
                         ngram_size,
                         penalty,
                     )
-
+            
             # decode next token using mode set in init
             next_token_id = self.decoder(next_logits)
 
-            total_log_prob += log_probs[next_token_id].item()
-            num_tokens += 1
+            if step > 0:
+                total_log_prob += log_probs[next_token_id].item()
+                num_tokens += 1
 
             next_token_tensor = torch.tensor([[next_token_id]], device=self.device)
             generated_ids = torch.cat([generated_ids, next_token_tensor], dim=1)
@@ -111,10 +106,15 @@ class SaeDecodePenaltyModel(BaseModel):
             if next_token_id == self.tokenizer.eos_token_id:
                 break
 
-        avg_log_prob = total_log_prob / max(num_tokens, 1)
-        ppl = math.exp(-avg_log_prob)
+        if num_tokens > 0:
+            avg_log_prob = total_log_prob / num_tokens
+            ppl = math.exp(-avg_log_prob)
+        else:
+            ppl = float('inf')
 
         text = self.tokenizer.decode(generated_ids[0], skip_special_tokens=True)
+        if with_prompt is False:
+            text = text[len(input):]
         return text, ppl
 
     def generate(self, input: str, max_length: int):
