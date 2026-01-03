@@ -1,0 +1,19 @@
+{
+    "model": "gpt2",
+    "decode_mode": "greedy",
+    "num_samples": 500,
+    "avg_metrics": {
+        "bleu": 0.0,
+        "meteor": 0.0,
+        "perplexity": 1.5710979171540949,
+        "rep_w": 0.41590120340216563,
+        "rep_n_1": 0.7555263303046279,
+        "rep_n_2": 0.7008695812885333,
+        "rep_n_3": 0.6792130927763737,
+        "rep_n_4": 0.6656509873614148,
+        "rep_n_5": 0.6547462702911452,
+        "rep_r": 0.8299325521942879
+    },
+    "result_path": "baseline/eq/greedy_gpt2.jsonl",
+    "metrics_path": "baseline/eq/greedy_gpt2_metrics.jsonl"
+}

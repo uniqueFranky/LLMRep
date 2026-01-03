@@ -1,0 +1,19 @@
+{
+    "model": "penalty_gemma-2-2b",
+    "decode_mode": "sae",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 2.5033264710406535,
+        "meteor": 0.1906772241920415,
+        "perplexity": 2.9937734742667184,
+        "rep_w": 0.14566276425455824,
+        "rep_n_1": 0.416216870359531,
+        "rep_n_2": 0.2042151127744237,
+        "rep_n_3": 0.10946059683441767,
+        "rep_n_4": 0.05362670316852248,
+        "rep_n_5": 0.023085163612430654,
+        "rep_r": 0.4491113452066846
+    },
+    "result_path": "test_results_new/iwslt/sae_penalty_gemma-2-2b.jsonl",
+    "metrics_path": "test_results_new/iwslt/sae_penalty_gemma-2-2b_metrics.jsonl"
+}

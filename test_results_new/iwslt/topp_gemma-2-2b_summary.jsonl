@@ -1,0 +1,19 @@
+{
+    "model": "gemma-2-2b",
+    "decode_mode": "topp",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 2.0715255226749583,
+        "meteor": 0.15506164652797513,
+        "perplexity": 1.4626033503562414,
+        "rep_w": 0.28533664445184515,
+        "rep_n_1": 0.6794972001590474,
+        "rep_n_2": 0.6113392183114882,
+        "rep_n_3": 0.5861711522774408,
+        "rep_n_4": 0.5684757760925383,
+        "rep_n_5": 0.5533184956639,
+        "rep_r": 0.7792717983232587
+    },
+    "result_path": "baseline/iwslt/topp_gemma-2-2b.jsonl",
+    "metrics_path": "baseline/iwslt/topp_gemma-2-2b_metrics.jsonl"
+}

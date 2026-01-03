@@ -1,0 +1,19 @@
+{
+    "model": "penalty_gpt2",
+    "decode_mode": "sae",
+    "num_samples": 500,
+    "avg_metrics": {
+        "bleu": 0.0,
+        "meteor": 0.0,
+        "perplexity": 5.852833349456179,
+        "rep_w": 0.16810222100834035,
+        "rep_n_1": 0.4488706483604289,
+        "rep_n_2": 0.17476446758403275,
+        "rep_n_3": 0.07119462126746805,
+        "rep_n_4": 0.02812644869186939,
+        "rep_n_5": 0.010035588581285167,
+        "rep_r": 0.41592299028581275
+    },
+    "result_path": "test_results_new/eq/sae_penalty_gpt2.jsonl",
+    "metrics_path": "test_results_new/eq/sae_penalty_gpt2_metrics.jsonl"
+}

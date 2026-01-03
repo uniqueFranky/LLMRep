@@ -25,13 +25,21 @@ def apply_ngram_penalty(input_text: str, tokenizer, logits: torch.Tensor, n: int
     Args:
         input_text: 当前已生成的完整历史文本 (str)
         tokenizer:用于将 input_text 转为 input_ids 的 tokenizer 对象
-        logits: 模型输出的 logits [1, vocab_size]
+        logits: 模型输出的 logits，支持 [vocab_size] 或 [batch_size, vocab_size]
         n: n-gram 的大小 (例如 n=3 表示 3-gram)
         lmbda: 衰减系数 (0 < lambda < 1)，越小惩罚越重
         
     Returns:
-        修正后的 logits
+        修正后的 logits，维度与输入保持一致
     """
+    
+    # --- 处理输入维度 ---
+    original_shape = logits.shape
+    is_1d = len(original_shape) == 1
+    
+    if is_1d:
+        # 如果是1D，转换为2D进行处理
+        logits = logits.unsqueeze(0)  # [vocab_size] -> [1, vocab_size]
     
     # --- 1. 文本转 ID (Tokenization) ---
     # 必须使用 add_special_tokens=False，防止在文本中间插入 [BOS]/[CLS] 干扰匹配
@@ -40,7 +48,7 @@ def apply_ngram_penalty(input_text: str, tokenizer, logits: torch.Tensor, n: int
     # --- 2. 边界检查 ---
     # 如果历史长度甚至不足以构成一个 n-gram 前缀，直接返回
     if len(input_ids) < n - 1:
-        return logits
+        return logits.squeeze(0) if is_1d else logits
 
     # --- 3. 确定前缀 (Context Suffix) ---
     # 我们需要看历史文本的最后 n-1 个 token
@@ -70,16 +78,16 @@ def apply_ngram_penalty(input_text: str, tokenizer, logits: torch.Tensor, n: int
     # log(P_new) = log(P_old) + k * log(lambda)
     # Logits 是 log(P) 的未归一化形式，直接加即可
     
-    if not next_token_counts:
-        return logits
+    if next_token_counts:
+        log_lmbda = math.log(lmbda)
         
-    log_lmbda = math.log(lmbda)
+        for token_id, k in next_token_counts.items():
+            # 现在logits确保是2D格式 [batch_size, vocab_size]
+            logits[0, token_id] += k * log_lmbda
     
-    for token_id, k in next_token_counts.items():
-        # 注意：logits 通常是 [batch_size, vocab_size]，这里假设 batch=1
-        logits[0, token_id] += k * log_lmbda
-        
-    return logits
+    # --- 6. 恢复原始维度 ---
+    return logits.squeeze(0) if is_1d else logits
+
 
 
 def greedy_decode_without_penalty(model, tokenizer, prompt, max_length):

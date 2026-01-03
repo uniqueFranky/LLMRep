@@ -1,0 +1,19 @@
+{
+    "model": "gpt2",
+    "decode_mode": "topp",
+    "num_samples": 1000,
+    "avg_metrics": {
+        "bleu": 1.3241158328914262,
+        "meteor": 0.1270408146162245,
+        "perplexity": 1.7605382868780473,
+        "rep_w": 0.42027861283612494,
+        "rep_n_1": 0.7985904027675957,
+        "rep_n_2": 0.7275488217774452,
+        "rep_n_3": 0.6953713962830094,
+        "rep_n_4": 0.672490952380291,
+        "rep_n_5": 0.6537277240635104,
+        "rep_r": 0.8955655929473837
+    },
+    "result_path": "baseline/nq/topp_gpt2.jsonl",
+    "metrics_path": "baseline/nq/topp_gpt2_metrics.jsonl"
+}

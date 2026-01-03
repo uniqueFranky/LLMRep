@@ -6,6 +6,8 @@ import json
 import logging
 import argparse
 
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -55,14 +57,13 @@ class IWSLTDataset(Dataset):
             if max_samples > 0 and cnt > max_samples:
                 break
             input_text = "Translate the following texts in Germany into English: " + i
-            
             # 推理
             generated, ppl = model.generate_with_perplexity(input_text, max_length=max_length)
             
             # 处理生成结果（去掉 prompt 部分）
             # 注意：建议加个判断，防止切片报错
-            generated_text = generated[len(input_text):] if len(generated) > len(input_text) else generated
-            
+            # generated_text = generated[len(input_text):] if len(generated) > len(input_text) else generated
+            generated_text = generated
             current_result = {
                 'input': input_text,
                 'expected': o,
@@ -82,12 +83,24 @@ class IWSLTDataset(Dataset):
 
 
 
-# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_greedy_gpt2.jsonl --max-length=150 --decode-mode=greedy
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_greedy_gpt2.jsonl --max-length=150 --decode-mode=greedy --max-samples=1000
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_penlaty_gpt2.jsonl --max-length=150 --decode-mode=penalty
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_greedy_gpt2.jsonl --compute-metrics
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_penlaty_gpt2.jsonl --compute-metrics
 # python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_penlaty_gpt2.jsonl.metrics.jsonl --result-path2=results/iwslt_greedy_gpt2.jsonl.metrics.jsonl --compare-metrics
 
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_gpt2.jsonl --max-length=150 --decode-mode=sae
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_gpt2_test.jsonl --compute-metrics
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_paper_gpt2.jsonl --max-length=150 --decode-mode=sae
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_paper_gpt2.jsonl --compute-metrics
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_temp_gpt2.jsonl --max-length=150 --decode-mode=sae
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_temp_gpt2.jsonl --compute-metrics
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_only_temp_gpt2_test.jsonl  --max-length=150 --decode-mode=sae --max-samples=1000
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_only_temp_gpt2_test.jsonl --compute-metrics
 
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_greedy_gemma2.jsonl --max-length=150 --decode-mode=greedy --max-samples=1000
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl --max-length=150 --decode-mode=penalty --max-samples=1000 --device=cuda:0
@@ -96,17 +109,22 @@ class IWSLTDataset(Dataset):
 # python -m src.evaluation.iwslt --model=google/gemma-2-2b --result-path=results/iwslt_penlaty_gemma2.jsonl.metrics.jsonl --result-path2=results/iwslt_greedy_gemma2.jsonl.metrics.jsonl --compare-metrics
 
 
+
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=baseline/iwslt/greedy_gpt2.jsonl --max-length=150 --decode-mode=greedy --max-samples=1000
+# python -m src.evaluation.iwslt --model=gpt2 --result-path=results/iwslt_sae_gpt2_test.jsonl --compute-metrics
+
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--model', type=str, required=True, help='Model name, e.g., gpt2')
     argparser.add_argument('--result-path', type=str, required=True, help='Path to save evaluation results')
     argparser.add_argument('--result-path2', type=str, default=None, help='')
     argparser.add_argument('--max-length', type=int, default=150, help='Maximum length for generation')
-    argparser.add_argument('--decode-mode', type=str, default='greedy', help='Decoding mode: greedy, penalty.')
+    argparser.add_argument('--decode-mode', type=str, default='greedy', help='Decoding mode: greedy, penalty, neuron.')
     argparser.add_argument('--max-samples', type=int, default=-1, help='Maximum number of samples to evaluate, -1 for all.')
     argparser.add_argument('--compute-metrics', action='store_true', help='Only compute metrics from existing results if set.')
     argparser.add_argument('--compare-metrics', action='store_true', help='Only compare metrics from existing results if set.')
     argparser.add_argument('--device', type=str, default='auto', help='Device to use for model inference.')
+
     
     args = argparser.parse_args()
     model_name = args.model
@@ -189,6 +207,9 @@ if __name__ == '__main__':
             for i, item in enumerate(results):
                 pred = item['generated']
                 gold = item['expected']
+                
+                if len(pred.split()) == 0:
+                    continue
                 
                 # 计算指标
                 metric = {
@@ -280,6 +301,26 @@ if __name__ == '__main__':
         from src.model.decode_penalty_model import DecodePenaltyModel
         from src.decode import apply_ngram_penalty
         decode_model = DecodePenaltyModel(tokenizer, model, penalty_func=apply_ngram_penalty)
+    elif decode_mode == 'sae':
+        from src.model.sae_decode_model import SaeGreedyDecodeModel
+        if model_name == "gpt2":
+            latent_idxs = [22275, 6972, 8357, 3615, 13944, 7798, 10178, 22317, 18380, 16631, 3661, 16888, 3164, 6371, 17597, 16894, 12873, 7083, 5295, 8848, 17443, 23990, 18929, 21963, 15147, 10931, 4051, 4025, 20200, 186, 19336, 15875, 7699, 5051, 7770, 24312]
+            # latent_idxs = []
+            decode_model = SaeGreedyDecodeModel (
+                latent_idxs=latent_idxs,
+                steering_coefficient=-5,
+                sae_release="gpt2-small-res-jb",
+                sae_id="blocks.9.hook_resid_pre",
+                device="cuda",
+                decoding_mode="greedy",
+                temperature=1,
+                freq_penalty=0.0,   
+            )            
+        else:
+            raise ValueError(f'Unsupported model : {model_name}')
+    elif decode_mode == 'neuron':
+        from src.model.neuron_prevent_model import NeuronPreventModel
+        decode_model = NeuronPreventModel(tokenizer, model,dataset=f'{os.getenv("REPETITION_DATASET")}/{model_name}.pt')
     else:
         raise ValueError(f'Unsupported decode mode: {decode_mode}')
 

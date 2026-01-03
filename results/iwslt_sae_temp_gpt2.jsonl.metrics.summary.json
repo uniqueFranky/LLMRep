@@ -1,0 +1,19 @@
+{
+    "model": "gpt2",
+    "decode_mode": "greedy",
+    "num_samples": 1013,
+    "avg_metrics": {
+        "bleu": 0.6349456668618083,
+        "meteor": 0.14268934915078915,
+        "perplexity": 9.773483056204647,
+        "rep_w": 0.07714717307321242,
+        "rep_n_1": 0.2998816105976536,
+        "rep_n_2": 0.0636855746640461,
+        "rep_n_3": 0.02843456056101149,
+        "rep_n_4": 0.01663170122917338,
+        "rep_n_5": 0.011161794494435585,
+        "rep_r": 0.18172256723406244
+    },
+    "result_path": "results/iwslt_sae_temp_gpt2.jsonl",
+    "metrics_path": "results/iwslt_sae_temp_gpt2.jsonl.metrics.jsonl"
+}

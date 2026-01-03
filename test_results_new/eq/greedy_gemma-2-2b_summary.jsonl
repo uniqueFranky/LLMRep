@@ -1,0 +1,19 @@
+{
+    "model": "gemma-2-2b",
+    "decode_mode": "greedy",
+    "num_samples": 500,
+    "avg_metrics": {
+        "bleu": 0.0,
+        "meteor": 0.0,
+        "perplexity": 1.3717067720199252,
+        "rep_w": 0.27790700524410855,
+        "rep_n_1": 0.531078341878256,
+        "rep_n_2": 0.40232257388414117,
+        "rep_n_3": 0.36719239341275295,
+        "rep_n_4": 0.35002125192007355,
+        "rep_n_5": 0.33768219223310064,
+        "rep_r": 0.5434615796853989
+    },
+    "result_path": "baseline/eq/greedy_gemma-2-2b.jsonl",
+    "metrics_path": "baseline/eq/greedy_gemma-2-2b_metrics.jsonl"
+}

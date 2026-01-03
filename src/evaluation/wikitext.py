@@ -2,6 +2,12 @@ import dotenv
 import os
 from .dataset import Dataset
 from ..model.base_model import BaseModel
+import json
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 dotenv.load_dotenv()
 
@@ -17,7 +23,7 @@ class WikitextDataset(Dataset):
             self.texts = file.read()
         self.tokens = self.texts.split(' ')
         self.offset = 0
-        self.max_len = len(self.tokens)
+        self.max_len = len(self.tokens) // (self.input_window + self.output_window)
 
     def __iter__(self):
         self.offset = 0
@@ -25,11 +31,11 @@ class WikitextDataset(Dataset):
     
     def __next__(self) -> tuple[str, str]:
 
-        if self.offset + self.input_window + self.output_window > self.max_len:
+        if self.offset + self.input_window + self.output_window > len(self.tokens):
             raise StopIteration
         text_in = ' '.join(self.tokens[self.offset: self.offset + self.input_window])
         text_out = ' '.join(self.tokens[self.offset + self.input_window: self.offset + self.input_window + self.output_window])
-        self.offset += 1
+        self.offset += self.input_window + self.output_window
         return (text_in, text_out)
 
     def evaluate(self, model: BaseModel, result_path: str, max_length: int=500, max_samples: int=-1):
