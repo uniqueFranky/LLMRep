@@ -22,6 +22,9 @@ def load_dataset(name: str):
     elif name == "eq":
         from src.evaluation.diversity_challenge import DiversityChallengeDataset
         return DiversityChallengeDataset(split='train')
+    elif name == "new_eq":
+        from src.evaluation.new_eq import NewEQDataset
+        return NewEQDataset(jsonl_path="rewritten_eq_dataset.jsonl")
     else:
         raise ValueError(f'Unsupported dataset: {name}')
 
@@ -61,7 +64,7 @@ def load_model(args):
     elif args.decode_mode == "topp":
         if args.model in ["gpt2", "google/gemma-2-2b"]:
             from src.model.topp_decode_model import TopPDecodeModel
-            decode_model = TopPDecodeModel(tokenizer, model, top_p=0.9, temperature=0.5)
+            decode_model = TopPDecodeModel(tokenizer, model, top_p=1, temperature=0.5)
         else:
             decode_model = load_api_model(args.model, temperature=0.5, top_k=-1, top_p=0.9)
     elif args.decode_mode == "penalty":
@@ -74,6 +77,7 @@ def load_model(args):
             latent_idxs = [22275, 6972, 8357, 3615, 13944, 7798, 10178, 22317, 18380, 16631, 3661, 16888, 3164, 6371, 17597, 16894, 12873, 7083, 5295, 8848, 17443, 23990, 18929, 21963, 15147, 10931, 4051, 4025, 20200, 186, 19336, 15875, 7699, 5051, 7770, 24312]
             decode_model = SaeGreedyDecodeModel (
                 latent_idxs=latent_idxs,
+                model="gpt2",
                 steering_coefficient=-4,
                 sae_release="gpt2-small-res-jb",
                 sae_id="blocks.9.hook_resid_pre",
@@ -87,7 +91,8 @@ def load_model(args):
             latent_idxs = [3350, 2424, 2752, 11566, 11653, 3050, 11018, 1563, 3996, 13589, 7644, 15662, 13000, 13032, 2210, 15312, 12056, 2205, 13513, 94, 421, 3858, 4884, 12653, 10243, 5263, 6608, 9423, 10860, 11592, 7637, 7618, 14613, 8065, 8509, 7341, 2645, 15954, 1988, 5490, 11985, 16300, 4017, 11076, 5425, 11049, 5429, 9227, 9795, 10178, 10566, 11073, 13907, 16094, 4946, 6129, 630, 7543, 1883, 8280, 14727, 12656, 12493, 7704, 13775, 1008, 6206, 7624, 11423, 14848, 14950, 2678, 3440, 4051, 7827, 8575, 13593, 16186, 13586, 16105, 6789, 147, 514, 1000, 7470, 15037, 577, 1447, 1007, 2632, 4071, 4807, 5964, 6954, 10744, 12099, 12827, 14148, 1365, 6023]
             decode_model = SaeGreedyDecodeModel (
                 latent_idxs=latent_idxs,
-                steering_coefficient=-0.8,
+                model="google/gemma-2-2b",
+                steering_coefficient=-3,
                 sae_release="gemma-scope-2b-pt-res-canonical",
                 sae_id="layer_25/width_16k/canonical",
                 device="cuda",
@@ -105,7 +110,7 @@ def load_model(args):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--dataset", type=str, required=True, choices=["iwslt", "nq", "eq"], 
+    parser.add_argument("--dataset", type=str, required=True, choices=["iwslt", "nq", "eq", "new_eq"], 
                         help="Dataset name. nq is Natural Questions, eq is Diversity_Challenge.")
     parser.add_argument('--model', type=str, required=True, 
                         choices=["gpt2", "google/gemma-2-2b", "Qwen/Qwen3-8B", "Qwen/Qwen3-32B", "tencent/Hunyuan-A13B-Instruct", "deepseek-ai/DeepSeek-V3.2", "Qwen/Qwen3-235B-A22B-Instruct-2507"], 
