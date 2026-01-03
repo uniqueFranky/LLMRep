@@ -128,7 +128,7 @@ def load_model(args):
             8: 0.3,
             9: 0.2,
             10: 0.1,
-        }, sae_release=sae_release, sae_id=sae_id, device=args.device)
+        }, sae_release=sae_release, sae_id=sae_id, device=args.device, steering_coefficient=-3)
     elif 'neuron' in args.decode_mode:
         from src.model.neuron_prevent_penalty_model import NeuronPreventPenaltyModel
         decoder = DecoderRegistry.get('top_k', kwargs={'k':30, 'temperature':0.5})

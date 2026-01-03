@@ -1,0 +1,171 @@
+================================================================================
+IMPROVEMENT ANALYSIS: Performance vs Baseline (topp)
+================================================================================
+
+Baseline Method: TOPP
+--------------------------------------------------------------------------------
+
+### NEURON vs TOPP ###
+Average Improvements:
+  BLEU:          -0.10%
+  METEOR:       +14.99%
+  PPL:          -83.38% (reduction)
+  Rep-W:        +10.96% (reduction)
+  Rep-R:        +24.40% (reduction)
+  Rep-N-Avg:    +49.16% (reduction)
+  Rep-All-Avg:  +41.41% (reduction)
+
+Detailed Results by Dataset-Model:
+  EQ-GPT-2:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -98.11%
+    Rep-W: +34.68%, Rep-R: +28.16%, Rep-All: +48.34%
+  EQ-Gemma-2-2B:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -52.22%
+    Rep-W: -22.58%, Rep-R:  -1.58%, Rep-All: +14.23%
+  IWSLT-GPT-2:
+    BLEU: +17.82%, METEOR: +62.27%, PPL: -134.90%
+    Rep-W: +39.12%, Rep-R: +33.88%, Rep-All: +52.81%
+  IWSLT-Gemma-2-2B:
+    BLEU: -29.38%, METEOR:  +0.39%, PPL: -66.10%
+    Rep-W:  +2.90%, Rep-R: +34.85%, Rep-All: +45.94%
+  NQ-GPT-2:
+    BLEU: +14.26%, METEOR: +20.74%, PPL: -85.35%
+    Rep-W: +32.63%, Rep-R: +25.00%, Rep-All: +45.05%
+  NQ-Gemma-2-2B:
+    BLEU:  -3.29%, METEOR:  +6.51%, PPL: -63.57%
+    Rep-W: -21.00%, Rep-R: +26.09%, Rep-All: +42.12%
+
+### NEURON_PENALTY vs TOPP ###
+Average Improvements:
+  BLEU:          +2.76%
+  METEOR:       +18.97%
+  PPL:         -122.29% (reduction)
+  Rep-W:        +27.61% (reduction)
+  Rep-R:        +39.25% (reduction)
+  Rep-N-Avg:    +70.22% (reduction)
+  Rep-All-Avg:  +60.90% (reduction)
+
+Detailed Results by Dataset-Model:
+  EQ-GPT-2:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -129.82%
+    Rep-W: +50.82%, Rep-R: +43.95%, Rep-All: +66.67%
+  EQ-Gemma-2-2B:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -79.56%
+    Rep-W:  +4.46%, Rep-R: +19.17%, Rep-All: +43.11%
+  IWSLT-GPT-2:
+    BLEU: +21.39%, METEOR: +73.71%, PPL: -192.33%
+    Rep-W: +51.97%, Rep-R: +48.46%, Rep-All: +69.42%
+  IWSLT-Gemma-2-2B:
+    BLEU: -31.98%, METEOR:  -0.02%, PPL: -106.71%
+    Rep-W: +14.61%, Rep-R: +45.91%, Rep-All: +62.24%
+  NQ-GPT-2:
+    BLEU: +29.22%, METEOR: +32.00%, PPL: -131.58%
+    Rep-W: +49.43%, Rep-R: +41.09%, Rep-All: +65.71%
+  NQ-Gemma-2-2B:
+    BLEU:  -2.09%, METEOR:  +8.12%, PPL: -93.75%
+    Rep-W:  -5.64%, Rep-R: +36.93%, Rep-All: +58.27%
+
+### PENALTY vs TOPP ###
+Average Improvements:
+  BLEU:         +20.86%
+  METEOR:       +19.26%
+  PPL:         -105.81% (reduction)
+  Rep-W:        +39.32% (reduction)
+  Rep-R:        +35.04% (reduction)
+  Rep-N-Avg:    +69.17% (reduction)
+  Rep-All-Avg:  +60.25% (reduction)
+
+Detailed Results by Dataset-Model:
+  EQ-GPT-2:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -112.63%
+    Rep-W: +46.61%, Rep-R: +33.66%, Rep-All: +60.50%
+  EQ-Gemma-2-2B:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -58.93%
+    Rep-W: +39.68%, Rep-R: +35.37%, Rep-All: +56.71%
+  IWSLT-GPT-2:
+    BLEU: +18.62%, METEOR: +41.51%, PPL: -147.71%
+    Rep-W: +37.48%, Rep-R: +26.79%, Rep-All: +56.59%
+  IWSLT-Gemma-2-2B:
+    BLEU: +19.47%, METEOR: +23.82%, PPL: -103.11%
+    Rep-W: +47.12%, Rep-R: +43.24%, Rep-All: +65.91%
+  NQ-GPT-2:
+    BLEU: +34.99%, METEOR: +25.79%, PPL: -118.96%
+    Rep-W: +38.96%, Rep-R: +29.69%, Rep-All: +57.55%
+  NQ-Gemma-2-2B:
+    BLEU: +52.08%, METEOR: +24.43%, PPL: -93.48%
+    Rep-W: +26.06%, Rep-R: +41.49%, Rep-All: +64.28%
+
+### SAE vs TOPP ###
+Average Improvements:
+  BLEU:          +3.25%
+  METEOR:       +23.92%
+  PPL:          -96.69% (reduction)
+  Rep-W:        +28.76% (reduction)
+  Rep-R:        +24.30% (reduction)
+  Rep-N-Avg:    +38.37% (reduction)
+  Rep-All-Avg:  +34.94% (reduction)
+
+Detailed Results by Dataset-Model:
+  EQ-GPT-2:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -159.91%
+    Rep-W: +38.25%, Rep-R: +31.44%, Rep-All: +45.75%
+  EQ-Gemma-2-2B:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -16.18%
+    Rep-W:  +8.42%, Rep-R:  +5.23%, Rep-All: +11.10%
+  IWSLT-GPT-2:
+    BLEU:  +7.42%, METEOR: +82.73%, PPL: -168.86%
+    Rep-W: +46.76%, Rep-R: +35.90%, Rep-All: +48.14%
+  IWSLT-Gemma-2-2B:
+    BLEU: -21.58%, METEOR:  +9.18%, PPL: -29.02%
+    Rep-W: +25.85%, Rep-R: +18.97%, Rep-All: +27.40%
+  NQ-GPT-2:
+    BLEU: +10.27%, METEOR: +32.05%, PPL: -182.53%
+    Rep-W: +45.15%, Rep-R: +38.77%, Rep-All: +55.10%
+  NQ-Gemma-2-2B:
+    BLEU: +23.42%, METEOR: +19.57%, PPL: -23.63%
+    Rep-W:  +8.13%, Rep-R: +15.48%, Rep-All: +22.17%
+
+### SAE_PENALTY vs TOPP ###
+Average Improvements:
+  BLEU:         +17.70%
+  METEOR:       +23.73%
+  PPL:         -152.62% (reduction)
+  Rep-W:        +44.49% (reduction)
+  Rep-R:        +38.76% (reduction)
+  Rep-N-Avg:    +71.56% (reduction)
+  Rep-All-Avg:  +63.15% (reduction)
+
+Detailed Results by Dataset-Model:
+  EQ-GPT-2:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -203.40%
+    Rep-W: +57.04%, Rep-R: +44.82%, Rep-All: +67.98%
+  EQ-Gemma-2-2B:
+    BLEU:  +0.00%, METEOR:  +0.00%, PPL: -60.29%
+    Rep-W: +36.99%, Rep-R: +28.88%, Rep-All: +52.99%
+  IWSLT-GPT-2:
+    BLEU: +19.17%, METEOR: +72.54%, PPL: -244.66%
+    Rep-W: +51.45%, Rep-R: +34.39%, Rep-All: +62.58%
+  IWSLT-Gemma-2-2B:
+    BLEU: +20.84%, METEOR: +22.97%, PPL: -104.69%
+    Rep-W: +48.95%, Rep-R: +42.37%, Rep-All: +65.51%
+  NQ-GPT-2:
+    BLEU: +13.91%, METEOR: +23.31%, PPL: -211.52%
+    Rep-W: +49.96%, Rep-R: +42.61%, Rep-All: +66.88%
+  NQ-Gemma-2-2B:
+    BLEU: +52.27%, METEOR: +23.54%, PPL: -91.17%
+    Rep-W: +22.55%, Rep-R: +39.48%, Rep-All: +62.94%
+
+================================================================================
+SUMMARY: Best Methods by Metric
+================================================================================
+Best BLEU improvement:        penalty (+20.86%)
+Best METEOR improvement:      sae (+23.92%)
+Best PPL reduction:           neuron (-83.38%)
+Best Rep-W reduction:         sae_penalty (+44.49%)
+Best Rep-R reduction:         neuron_penalty (+39.25%)
+Best Rep-N-Avg reduction:     sae_penalty (+71.56%)
+Best Rep-All-Avg reduction:   sae_penalty (+63.15%)
+
+Generated on: 2026-01-03 14:56:07
+
+================================================================================

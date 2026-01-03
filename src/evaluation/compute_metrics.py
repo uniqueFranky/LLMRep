@@ -2,6 +2,7 @@
 import argparse
 import os
 import json
+import math
 from pathlib import Path
 
 from src.metrics import bleu, meteor, rep_w, rep_n, rep_r
@@ -104,7 +105,23 @@ def compute_one_file(result_path: Path):
     avg_metrics = {}
     for key in metric_keys:
         values = [m[key] for m in all_metrics]
-        avg_metrics[key] = sum(values) / len(values)
+        
+        if key == "perplexity":
+            # 对于perplexity，跳过inf和nan值
+            valid_values = [v for v in values if not (math.isinf(v) or math.isnan(v))]
+            if valid_values:
+                avg_metrics[key] = sum(valid_values) / len(valid_values)
+                print(f"  perplexity: used {len(valid_values)}/{len(values)} valid values")
+            else:
+                avg_metrics[key] = float("nan")
+                print(f"  perplexity: no valid values found")
+        else:
+            # 对于其他指标，跳过nan值（但保留inf，如果有的话）
+            valid_values = [v for v in values if not math.isnan(v)]
+            if valid_values:
+                avg_metrics[key] = sum(valid_values) / len(valid_values)
+            else:
+                avg_metrics[key] = float("nan")
 
     summary = {
         "model": model_name,
@@ -121,7 +138,12 @@ def compute_one_file(result_path: Path):
     print(f"summary written to {summary_path}")
     print("Average Metrics:")
     for k, v in avg_metrics.items():
-        print(f"  {k}: {v:.4f}")
+        if math.isnan(v):
+            print(f"  {k}: NaN")
+        elif math.isinf(v):
+            print(f"  {k}: inf")
+        else:
+            print(f"  {k}: {v:.4f}")
 
 
 def main():

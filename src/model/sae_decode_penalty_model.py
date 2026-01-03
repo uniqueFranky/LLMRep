@@ -44,11 +44,20 @@ class SaeDecodePenaltyModel(BaseModel):
         model_kwargs = self.sae.cfg.metadata.get("model_from_pretrained_kwargs", {}) or {}
 
         # ===== load transformer =====
-        self.model = HookedSAETransformer.from_pretrained(
-            model_name,
-            device=device,
-            **model_kwargs,
-        )
+        if 'gpt2' in model_name:
+            self.model = HookedSAETransformer.from_pretrained(
+                model_name,
+                device=device,
+                **model_kwargs,
+            )
+
+        else:
+            self.model = HookedSAETransformer.from_pretrained_no_processing(
+                model_name,
+                device=device,
+                torch_dtype=torch.float16,
+                **model_kwargs,
+            )
 
         # ===== tokenizer =====
 

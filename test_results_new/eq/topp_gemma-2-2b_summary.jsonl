@@ -1,0 +1,19 @@
+{
+    "model": "gemma-2-2b",
+    "decode_mode": "topp",
+    "num_samples": 500,
+    "avg_metrics": {
+        "bleu": 0.0,
+        "meteor": 0.0,
+        "perplexity": 1.5366049457346938,
+        "rep_w": 0.25255660184021306,
+        "rep_n_1": 0.4896643828737469,
+        "rep_n_2": 0.35179681140060387,
+        "rep_n_3": 0.3131586550271298,
+        "rep_n_4": 0.29215307074607016,
+        "rep_n_5": 0.2766443969959933,
+        "rep_r": 0.5005574705092202
+    },
+    "result_path": "baseline/eq/topp_gemma-2-2b.jsonl",
+    "metrics_path": "baseline/eq/topp_gemma-2-2b_metrics.jsonl"
+}

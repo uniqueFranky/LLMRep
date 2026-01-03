@@ -92,8 +92,9 @@ class TaskRunner:
     def generate_task_combinations(self):
         """生成所有任务组合"""
         datasets = ['iwslt', 'eq', 'nq']
-        models = ['google/gemma-2-2b', 'gpt2']
-        decode_modes = ['penalty', 'neuron', 'sae_penalty', 'neuron_penalty']
+        # models = ['google/gemma-2-2b', 'gpt2']
+        models = ['google/gemma-2-2b']
+        decode_modes = ['sae_penalty']
         
         combinations = list(itertools.product(datasets, models, decode_modes))
         self.logger.info(f"生成了 {len(combinations)} 个任务组合")
